@@ -1,4 +1,16 @@
-FROM flomesh/pipy-pjs:0.4.0-203
+FROM flomesh/pipy-pjs:0.4.0-205
+LABEL maintainer="Kevein Liu<kevein@flomesh.cn>"
 
-COPY /scripts /scripts
-ENTRYPOINT [ "pipy", "/scripts/main.js" ]
+ARG RELEASE_VERSION
+ENV RELEASE_VERSION=${RELEASE_VERSION:-0.4.0}
+
+ARG REVISION
+ENV REVISION=${REVISION:-1}
+
+COPY docker-entrypoint.sh /docker-entrypoint.sh
+
+ENTRYPOINT ["/docker-entrypoint.sh"]
+
+STOPSIGNAL SIGQUIT
+
+CMD ["pipy", "node-start"]
