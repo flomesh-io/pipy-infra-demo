@@ -1,59 +1,36 @@
-((config, eureka, instance) => 
+((config, instance) => 
   pipy({
     _g: {
       _terminated: false,
     },
   })
   
-  // for dumping real instance traffic
+  // discovery: convert real ip to 127.x.x.x and offset port by 10
   .listen(8771)
     .demuxHTTP('request')
   
   .pipeline('request')
-    .use(
-      config.plugins,
+    .use([
+      'plugins/log.js',
+      'plugins/proxy.js',
+    ],
       'request',
       'response',
     )
   
-  // health check
-  .task(eureka.client.healthcheckInterval)
-    .use(
-      config.plugins,
-      'healthcheck',
-      () => _g._terminated,
-    )
-    .replaceMessage(new StreamEnd)
-  
-  // heartbeat
-  .task(eureka.client.heartbeatInterval)
-    .use(
-      config.plugins,
-      'heartbeat',
-      () => _g._terminated,
-    )
-    .replaceMessage(new StreamEnd)
-  
   // for pod preStop hook  
   .listen(8762)
     .use(
-      config.plugins,
+      'plugins/registry.js',
       'terminating'
     )
-    .replaceMessage(
-      msg => (
-        msg.head.status == 200 && (
-          _g._terminated = true
-        ),
-        new Message(msg.head, '')
-      )
-    )
-    .encodeHTTPResponse()
   
   //inbound listener
   .listen(+instance?.spec.containers[0]?.ports[0]?.containerPort + 10)
+
+  //outbound listener
+  .listen(config?.ports?.outbound || 8081) //?
 )(
   JSON.decode(pipy.load('config/main.json')),
-  JSON.decode(pipy.load('config/eureka.json')),
   JSON.decode(pipy.load('config/pod.json'))
 )

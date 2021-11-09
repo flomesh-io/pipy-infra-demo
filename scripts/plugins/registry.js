@@ -4,6 +4,7 @@
   targetAddr = instance.status.podIP,
   targetPort = +instance?.spec.containers[0]?.ports[0]?.containerPort,
   instanceId = `${instance.metadata.name}:${service}:${targetPort}`,
+  targetPort += 10,
 
   pipy({
     instanceFunc: ((ins) => (
@@ -55,8 +56,19 @@
       _lastDirtytime: 0,
       _remoteStatus: '',
       _requreStatusUpdate: false,
+      _terminated: false,
     }
   })
+
+  // healthcheck
+  .task(eureka.client.healthcheckInterval)
+    .link('healthcheck', () => !_g._terminated)
+    .replaceMessage(new StreamEnd)
+
+  // heartbeat
+  .task(eureka.client.heartbeatInterval)
+    .link('heartbeat', () => !_g._terminated)
+    .replaceMessage(new StreamEnd)    
 
   .pipeline('healthcheck')
     .replaceMessage(
@@ -233,7 +245,15 @@
     //hook pod terminating via preStop
     .pipeline('terminating')
       .demuxHTTP('deregister')
-
+      .handleMessageStart(
+        msg => (
+          msg.head.status == 200 && (
+            _g._terminated = true
+          ),
+          new Message(msg.head, '')
+        )
+      )
+      // .encodeHTTPResponse()
 
     // for all logics to log req and res
     .pipeline('forward')

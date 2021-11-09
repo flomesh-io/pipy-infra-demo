@@ -10,7 +10,7 @@
   .pipeline('request')
     .handleMessageStart(
       msg => _target = _router.find(
-          '',
+          msg.head.headers.host,
           msg.head.path
         )
     )
