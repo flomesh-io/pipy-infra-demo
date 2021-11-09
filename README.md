@@ -1,5 +1,5 @@
 
-## how to use
+## How to use
 
 ## init env
 

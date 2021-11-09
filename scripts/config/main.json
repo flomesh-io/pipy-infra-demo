@@ -1,0 +1,7 @@
+{
+  "plugins": [
+    "plugins/log.js",
+    "plugins/proxy.js",
+    "plugins/eureka.js"
+  ]
+}

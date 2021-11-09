@@ -1,0 +1,214 @@
+{
+    "apiVersion": "v1",
+    "kind": "Pod",
+    "metadata": {
+        "creationTimestamp": "2021-11-08T23:38:20Z",
+        "generateName": "samples-bookinfo-ratings-7b7b7f7c47-",
+        "labels": {
+            "app": "samples-bookinfo-ratings",
+            "pod-template-hash": "7b7b7f7c47"
+        },
+        "name": "samples-bookinfo-ratings-7b7b7f7c47-dkw7j",
+        "namespace": "default",
+        "ownerReferences": [
+            {
+                "apiVersion": "apps/v1",
+                "blockOwnerDeletion": true,
+                "controller": true,
+                "kind": "ReplicaSet",
+                "name": "samples-bookinfo-ratings-7b7b7f7c47",
+                "uid": "d1c67740-494e-4820-b4a5-07b554ddf451"
+            }
+        ],
+        "resourceVersion": "28630",
+        "uid": "af48a678-d45f-403b-8a8a-b1246279deee"
+    },
+    "spec": {
+        "containers": [
+            {
+                "env": [
+                    {
+                        "name": "K8S_SAMPLES_DISCOVERY_SERVER_HOSTNAME",
+                        "value": "127.0.0.1"
+                    },
+                    {
+                        "name": "K8S_SAMPLES_DISCOVERY_SERVER_PORT",
+                        "value": "8771"
+                    },
+                    {
+                        "name": "eureka.client.enabled",
+                        "value": "false"
+                    },
+                    {
+                        "name": "spring.application.name",
+                        "value": "bookinfo-ratings"
+                    }
+                ],
+                "image": "flomesh/samples-bookinfo-ratings:latest",
+                "imagePullPolicy": "IfNotPresent",
+                "lifecycle": {
+                    "preStop": {
+                        "httpGet": {
+                            "host": "localhost",
+                            "path": "/deregister",
+                            "port": 8762,
+                            "scheme": "HTTP"
+                        }
+                    }
+                },
+                "name": "app",
+                "ports": [
+                    {
+                        "containerPort": 8101,
+                        "protocol": "TCP"
+                    }
+                ],
+                "resources": {},
+                "terminationMessagePath": "/dev/termination-log",
+                "terminationMessagePolicy": "File",
+                "volumeMounts": [
+                    {
+                        "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                        "name": "kube-api-access-q9tjx",
+                        "readOnly": true
+                    }
+                ]
+            }
+        ],
+        "dnsPolicy": "ClusterFirst",
+        "enableServiceLinks": true,
+        "nodeName": "k3d-test-server-0",
+        "preemptionPolicy": "PreemptLowerPriority",
+        "priority": 0,
+        "restartPolicy": "Always",
+        "schedulerName": "default-scheduler",
+        "securityContext": {},
+        "serviceAccount": "default",
+        "serviceAccountName": "default",
+        "terminationGracePeriodSeconds": 30,
+        "tolerations": [
+            {
+                "effect": "NoExecute",
+                "key": "node.kubernetes.io/not-ready",
+                "operator": "Exists",
+                "tolerationSeconds": 300
+            },
+            {
+                "effect": "NoExecute",
+                "key": "node.kubernetes.io/unreachable",
+                "operator": "Exists",
+                "tolerationSeconds": 300
+            }
+        ],
+        "volumes": [
+            {
+                "name": "kube-api-access-q9tjx",
+                "projected": {
+                    "defaultMode": 420,
+                    "sources": [
+                        {
+                            "serviceAccountToken": {
+                                "expirationSeconds": 3607,
+                                "path": "token"
+                            }
+                        },
+                        {
+                            "configMap": {
+                                "items": [
+                                    {
+                                        "key": "ca.crt",
+                                        "path": "ca.crt"
+                                    }
+                                ],
+                                "name": "kube-root-ca.crt"
+                            }
+                        },
+                        {
+                            "downwardAPI": {
+                                "items": [
+                                    {
+                                        "fieldRef": {
+                                            "apiVersion": "v1",
+                                            "fieldPath": "metadata.namespace"
+                                        },
+                                        "path": "namespace"
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            }
+        ]
+    },
+    "status": {
+        "conditions": [
+            {
+                "lastProbeTime": null,
+                "lastTransitionTime": "2021-11-08T23:38:20Z",
+                "status": "True",
+                "type": "Initialized"
+            },
+            {
+                "lastProbeTime": null,
+                "lastTransitionTime": "2021-11-08T23:38:24Z",
+                "status": "True",
+                "type": "Ready"
+            },
+            {
+                "lastProbeTime": null,
+                "lastTransitionTime": "2021-11-08T23:38:24Z",
+                "status": "True",
+                "type": "ContainersReady"
+            },
+            {
+                "lastProbeTime": null,
+                "lastTransitionTime": "2021-11-08T23:38:20Z",
+                "status": "True",
+                "type": "PodScheduled"
+            }
+        ],
+        "containerStatuses": [
+            {
+                "containerID": "containerd://da26315bb11b70381fee8cd58ea6f30cd716a33368a51cbf221bae3844830a8a",
+                "image": "docker.io/flomesh/samples-bookinfo-ratings:latest",
+                "imageID": "docker.io/flomesh/samples-bookinfo-ratings@sha256:03052d4ac2ee449711f278a7c39e6090560f1af5170cb9fac1be5c0d5e3eb731",
+                "lastState": {},
+                "name": "app",
+                "ready": true,
+                "restartCount": 0,
+                "started": true,
+                "state": {
+                    "running": {
+                        "startedAt": "2021-11-08T23:38:23Z"
+                    }
+                }
+            },
+            {
+                "containerID": "containerd://11308c677a122171f719c20bdaaecb4b648ef9237cfc481d870ab0da1911afb8",
+                "image": "docker.io/addozhang/pipy-infra:latest",
+                "imageID": "docker.io/addozhang/pipy-infra@sha256:2e35721fa7eff4784e360c7aeb3c6960a7e90d7a8212808d88a86bfc3f2a79cd",
+                "lastState": {},
+                "name": "infra",
+                "ready": true,
+                "restartCount": 0,
+                "started": true,
+                "state": {
+                    "running": {
+                        "startedAt": "2021-11-08T23:38:23Z"
+                    }
+                }
+            }
+        ],
+        "hostIP": "172.27.0.2",
+        "phase": "Running",
+        "podIP": "10.42.0.46",
+        "podIPs": [
+            {
+                "ip": "10.42.0.46"
+            }
+        ],
+        "qosClass": "BestEffort",
+        "startTime": "2021-11-08T23:38:20Z"
+    }
+}
