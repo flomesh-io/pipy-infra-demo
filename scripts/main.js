@@ -27,6 +27,8 @@
   
   //inbound listener
   .listen(+instance?.spec.containers[0]?.ports[0]?.containerPort + 10)
+    //simple proxy
+    .connect(`127.0.0.1:${+instance?.spec.containers[0]?.ports[0]?.containerPort}`)
 
   //outbound listener
   .listen(config?.ports?.outbound || 8081) //?
