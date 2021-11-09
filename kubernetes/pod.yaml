@@ -21,6 +21,12 @@ spec:
     ports:
     - containerPort: 8101
     resources: {}
+    lifecycle:
+      preStop:
+        httpGet:
+          host: localhost
+          port: 8762
+          path: /deregister
   dnsPolicy: ClusterFirst
   restartPolicy: Always
 status: {}
