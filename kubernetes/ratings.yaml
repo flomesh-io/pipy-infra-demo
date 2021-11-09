@@ -19,18 +19,18 @@ spec:
     spec:
       containers:
       # - image: docker.io/addozhang/pipy-infra:latest
-      - image: docker.io/flomesh/pipy-node:0.4.0-205
-        imagePullPolicy: Always
-        name: infra
-        resources: {}   
-        readinessProbe:
-          initialDelaySeconds: 5
-          periodSeconds: 2
-          successThreshold: 1
-          failureThreshold: 30
-          httpGet:
-            port: 8771
-            path: /actuator/health # means script pulled
+      # - image: docker.io/flomesh/pipy-node:0.4.0-205
+      #   imagePullPolicy: Always
+      #   name: infra
+      #   resources: {}   
+      #   readinessProbe:
+      #     initialDelaySeconds: 5
+      #     periodSeconds: 2
+      #     successThreshold: 1
+      #     failureThreshold: 30
+      #     httpGet:
+      #       port: 8771
+      #       path: /actuator/health # means script pulled
       - image: flomesh/samples-bookinfo-ratings:latest
         name: app
         imagePullPolicy: IfNotPresent
@@ -41,6 +41,12 @@ spec:
           value: '8771'
         - name: eureka.client.enabled
           value: 'false'
+        - name: eureka.client.enabled
+          value: 'false'
+        - name: spring.cloud.config.discovery.enabled
+          value: 'false'
+        - name: spring.cloud.config.uri
+          value: 'http://samples-config-service:8888'          
         - name: spring.application.name
           value: 'bookinfo-ratings'
         ports:
