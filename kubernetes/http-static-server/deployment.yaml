@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pipy-http-static-server
+spec:
+  selector:
+    matchLabels:
+      app: pipy-http-static-server
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: pipy-http-static-server
+    spec:
+      shareProcessNamespace: true
+      containers:
+      - name: pipy-http-static-server
+        image: leopeng1995/http-static-server:0.1.0
+        ports:
+        - containerPort: 6080

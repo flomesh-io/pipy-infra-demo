@@ -28,9 +28,9 @@ $ k3d cluster create infra-test --k3s-arg "--pause-image=flomesh/pipy-node:0.4.0
 
 ## Run demo
 
-In [kubernetes/pod.yaml](./kubernetes/pod.yaml), we have disabled service discovery by injecting few environments.
+In [kubernetes/springboot/pod.yaml](./kubernetes/springboot/pod.yaml), we have disabled service discovery by injecting few environments.
 
-1. Execute `kubectl apply -f kubernetes/pod.yaml`.
+1. Execute `kubectl apply -f kubernetes/springboot/pod.yaml`.
 2. Execute `kubectl get po samples-bookinfo-ratings -o json > scripts/config/pod.json`
 
 ### Init codebase
