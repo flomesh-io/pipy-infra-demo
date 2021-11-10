@@ -1,6 +1,8 @@
-((eureka, instance, service, instanceId, targetAddr, targetPort,) => (
+((eureka, instance, service, healthcheckPath, instanceId, targetAddr, targetPort,) => (
   
   service = instance?.spec.containers[0]?.env.find(e => e.name == 'spring.application.name')?.value,
+  healthcheckPath = instance?.spec.containers[0]?.readinessProbe?.httpGet?.path,
+  healthcheckPath == undefined && (healthcheckPath = '/actuator/health'),
   targetAddr = instance.status.podIP,
   targetPort = +instance?.spec.containers[0]?.ports[0]?.containerPort,
   instanceId = `${instance.metadata.name}:${service}:${targetPort}`,
@@ -75,7 +77,7 @@
       () => new Message(
         {
           method: 'GET',
-          path: '/actuator/health',
+          path: `${healthcheckPath}`,
           headers: {
             "host": `localhost:${targetPort}`,
             "user-agent": "curl/7.64.1",
@@ -90,6 +92,7 @@
     .replaceMessage(
       (msg, currentStatus) => (
         currentStatus = JSON.decode(msg.body)?.status,
+        currentStatus == undefined && msg.head.status == 200 && (currentStatus = 'UP'),
         _g._healthy = msg.head.status == 200 && currentStatus.toLowerCase() == 'up',
         Boolean(currentStatus) && (
           (currentStatus.toLowerCase() != _g._remoteStatus.toLowerCase() && _g._registered) && (_g._requreStatusUpdate = true)

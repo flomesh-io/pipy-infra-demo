@@ -2,7 +2,7 @@
   pipy({
     _router: new algo.URLRouter({
       '/eureka/apps/*': eureka.host,
-      '/actuator/*': `127.0.0.1:${+instance?.spec.containers[0]?.ports[0]?.containerPort}`,
+      '/*': `127.0.0.1:${+instance?.spec.containers[0]?.ports[0]?.containerPort}`,
     }),
     _target: null
   })
