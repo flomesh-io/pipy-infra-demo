@@ -15,6 +15,8 @@ spec:
       shareProcessNamespace: true
       containers:
       - name: pipy-http-static-server
-        image: leopeng1995/http-static-server:0.1.0
+        image: flomesh/pipy-pjs:0.4.0-211
+        command: ["pipy"]
+        args: ["/etc/pipy/test/015-http-static-server/pipy.js"]
         ports:
         - containerPort: 6080
