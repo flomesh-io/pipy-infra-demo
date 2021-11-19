@@ -10,27 +10,16 @@ spec:
   selector:
     matchLabels:
       app: samples-bookinfo-ratings
+      infra.flomesh.io/registry: 'true'
   strategy: {}
   template:
     metadata:
       creationTimestamp: null
       labels:
         app: samples-bookinfo-ratings
+        infra.flomesh.io/registry: 'true'
     spec:
       containers:
-      # - image: docker.io/addozhang/pipy-infra:latest
-      # - image: docker.io/flomesh/pipy-node:0.4.0-205
-      #   imagePullPolicy: Always
-      #   name: infra
-      #   resources: {}   
-      #   readinessProbe:
-      #     initialDelaySeconds: 5
-      #     periodSeconds: 2
-      #     successThreshold: 1
-      #     failureThreshold: 30
-      #     httpGet:
-      #       port: 8771
-      #       path: /actuator/health # means script pulled
       - image: flomesh/samples-bookinfo-ratings:latest
         name: app
         imagePullPolicy: IfNotPresent
@@ -52,10 +41,20 @@ spec:
         ports:
         - containerPort: 8101
         resources: {}
+        readinessProbe:
+          initialDelaySeconds: 5
+          periodSeconds: 2
+          successThreshold: 1
+          failureThreshold: 30
+          httpGet:
+            port: 8101
+            path: /actuator/health        
         lifecycle:
           preStop:
-            httpGet:
-              host: localhost
-              port: 8762
-              path: /deregister
+            exec:
+              command:
+              - "sh"
+              - "-c"
+              - |
+                wget 127.0.0.1:8762 && sleep 5s
 status: {}
