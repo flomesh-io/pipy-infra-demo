@@ -1,5 +1,13 @@
 {
-  "ports": {
-    "outbound": "8081"
+  "inbound": {
+    "enabled": true
+  },
+  "outbound": {
+    "enabled": false,
+    "port": 8081
+  },
+  "discovery": {
+    "enabled": false,
+    "port": 8771
   }
 }

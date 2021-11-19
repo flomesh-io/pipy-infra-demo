@@ -17,9 +17,9 @@ pipy()
   .decompressHTTP()
   .replaceMessage(
     msg => (
-      msg.head.headers['content-encoding'] = '*',
-      msg.body && console.log(JSON.stringify(msg.head)),
-      msg.body && console.log(`res status: ${msg.head.status}`),
+      msg.head && (msg.head.headers['content-encoding'] = '*'),
+      msg.head && console.log(JSON.stringify(msg.head)),
+      msg.head && console.log(`res status: ${msg.head.status}`),
       msg.body && console.log(`res body: ${msg.body}`),
       new Message(msg.head, msg.body)
     )
