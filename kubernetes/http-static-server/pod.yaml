@@ -19,13 +19,21 @@ spec:
     - containerPort: 6080
     resources: {} 
     readinessProbe:
-      initialDelaySeconds: 5
+      initialDelaySeconds: 20
       periodSeconds: 2
       successThreshold: 1
       failureThreshold: 30
       httpGet:
         port: 6080
         path: /index.html
+    lifecycle:
+      preStop:
+        exec:
+          command:
+          - "sh"
+          - "-c"
+          - |
+            wget 127.0.0.1:8762 && sleep 5s        
   dnsPolicy: ClusterFirst
   restartPolicy: Always
 status: {}

@@ -23,7 +23,7 @@ spec:
     - containerPort: 8101
     resources: {}   
     readinessProbe:
-      initialDelaySeconds: 5
+      initialDelaySeconds: 30
       periodSeconds: 2
       successThreshold: 1
       failureThreshold: 30
