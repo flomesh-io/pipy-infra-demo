@@ -48,7 +48,7 @@ sudo chmod 644 /etc/rancher/k3s/k3s.yaml
 ### 2.2. k3s in docker via k3d
 
 ```shell
-k3d cluster create infra-test --k3s-arg "--pause-image=flomesh/pipy-node:0.4.0-216"@
+k3d cluster create infra-test --k3s-arg "--pause-image=flomesh/pipy-node:0.4.0-224"@
 ```
 
 ## 3. Setup Environment
